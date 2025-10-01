@@ -45,4 +45,119 @@ Perfect for empowering women's financial independence through technology.
 - **Charts**: FL Chart for data visualization
 
 ## 🏗️ Architecture
+lib/
+├── core/ # Core functionality & utilities
+├── features/ # Feature-based modules
+│ ├── authentication/ # Login, register, auth logic
+│ ├── dashboard/ # Main dashboard & overview
+│ ├── wallet/ # Transaction management
+│ ├── learn_hub/ # Educational content
+│ ├── insights/ # Analytics & reports
+│ └── financial_tools/ # Calculators & planners
+├── shared/ # Shared components & widgets
+├── services/ # External services (Firebase, etc.)
+└── config/ # App configuration & routing
 
+## 📱 Database Structure (Firebase Firestore)
+
+// Users Collection
+users: {
+uid123: {
+name: "User Name",
+email: "user@example.com",
+totalBalance: 15000,
+savingsGoal: 5000,
+createdAt: timestamp
+}
+}
+
+// Transactions Collection
+transactions: {
+t1: {
+userId: "uid123",
+type: "expense", // or "income"
+category: "Food",
+amount: 500,
+date: "2025-10-01"
+}
+}
+
+// Tutorials Collection
+tutorials: {
+tut1: {
+title: "Basics of Budgeting",
+type: "article", // or "video"
+content: "Budgeting helps you control money...",
+category: "budgeting"
+}
+}
+
+text
+
+## 🚦 Getting Started
+
+### Prerequisites
+- Flutter SDK (>=3.13.0)
+- Firebase CLI  
+- Dart SDK
+- Git
+
+### Installation
+
+1. **Clone the repository**
+git clone https://github.com/YOUR_USERNAME/sheconomy-app.git
+cd sheconomy-app
+
+text
+
+2. **Install dependencies**
+flutter pub get
+
+text
+
+3. **Configure Firebase**
+flutterfire configure
+
+text
+
+4. **Run the app**
+flutter run
+
+text
+
+## 🧪 Development Roadmap
+
+- [x] Project setup and architecture
+- [x] Firebase integration
+- [x] Authentication system
+- [ ] User registration and profile
+- [ ] Dashboard implementation  
+- [ ] Wallet and transaction management
+- [ ] Learn Hub with tutorials
+- [ ] Financial calculators
+- [ ] Charts and insights
+- [ ] Testing and deployment
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Flutter team for the amazing framework
+- Firebase for backend services  
+- Women in fintech community for inspiration
+
+---
+
+<div align="center">
+<p>Made with ❤️ for women's financial empowerment</p>
+</div>
