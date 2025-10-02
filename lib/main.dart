@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'tools/sip_calculator.dart';
+import 'tools/savings_goal_tracker.dart';
+import 'tools/loan_emi_calculator.dart';
+import 'tools/budget_planner.dart'; // Add this import
+import 'learn/learn_hub_page.dart';
 
 void main() {
   runApp(const SHEconomyApp());
@@ -935,7 +940,7 @@ class _DashboardPageState extends State<DashboardPage> {
           onDeleteTransaction: deleteTransaction,
         );
       case 2:
-        return const LearnTab();
+        return const LearnHubPage();
       case 3:
         return InsightsTab(transactions: sharedTransactions);
       case 4:
@@ -1150,12 +1155,10 @@ class DashboardHome extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Show actual recent transactions
-          ...recentTransactions
-              .map((transaction) => _TransactionCard(
-                    transaction: transaction,
-                    onDelete: () {}, // Disable delete on dashboard
-                  ))
-              .toList(),
+          ...recentTransactions.map((transaction) => _TransactionCard(
+                transaction: transaction,
+                onDelete: () {}, // Disable delete on dashboard
+              )),
 
           const SizedBox(height: 24),
 
@@ -2190,7 +2193,7 @@ class _InsightsTabState extends State<InsightsTab> {
                       percentage: percentage,
                       color: _getCategoryColor(entry.key),
                     );
-                  }).toList(),
+                  }),
                 ] else ...[
                   const SizedBox(height: 100),
                   const Center(
@@ -2499,8 +2502,9 @@ class _InsightsTabState extends State<InsightsTab> {
 
   String _getHealthScoreDescription() {
     double score = _calculateHealthScore();
-    if (score >= 0.8)
+    if (score >= 0.8) {
       return 'You\'re saving well and maintaining great financial habits!';
+    }
     if (score >= 0.6) return 'You\'re doing well but could save a bit more.';
     if (score >= 0.4) return 'Try to reduce expenses and increase savings.';
     return 'Focus on cutting expenses and building an emergency fund.';
@@ -2788,29 +2792,71 @@ class PieChartPainter extends CustomPainter {
 // ===============================================
 // PLACEHOLDER TABS - LEARN & TOOLS
 // ===============================================
-class LearnTab extends StatelessWidget {
-  const LearnTab({super.key});
+
+class LearnHubPage extends StatefulWidget {
+  const LearnHubPage({super.key});
+
+  @override
+  State<LearnHubPage> createState() => _LearnHubPageState();
+}
+
+class _LearnHubPageState extends State<LearnHubPage> {
+  final List<Tutorial> tutorials = [
+    Tutorial(title: 'Budgeting Basics', category: 'Budgeting'),
+    Tutorial(title: 'Saving Strategies', category: 'Saving'),
+    Tutorial(title: 'Investing 101', category: 'Investment'),
+    Tutorial(title: 'Debt Management', category: 'Debt'),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.school, size: 80, color: Color(0xFF6B73FF)),
-          SizedBox(height: 16),
-          Text(
-            'Learn Hub',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            'Coming Soon!',
-            style: TextStyle(fontSize: 18, color: Color(0xFF8B8B8B)),
-          ),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Learn Hub'),
+        backgroundColor: const Color(0xFF6B73FF),
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: tutorials.length,
+        itemBuilder: (context, index) {
+          final tutorial = tutorials[index];
+          return Card(
+            elevation: 3,
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            child: ListTile(
+              title: Text(tutorial.title),
+              subtitle: Text(tutorial.category),
+              trailing: const Icon(Icons.arrow_forward_ios),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text(tutorial.title),
+                    content: Text(
+                        'Category: ${tutorial.category}\n\nMore content coming soon...'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Close'),
+                      ),
+                    ],
+                  ),
+                );
+                // TODO: Implement detail view or video playback here
+              },
+            ),
+          );
+        },
       ),
     );
   }
+}
+
+class Tutorial {
+  final String title;
+  final String category;
+
+  Tutorial({required this.title, required this.category});
 }
 
 class ToolsTab extends StatelessWidget {
@@ -2818,22 +2864,58 @@ class ToolsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.calculate, size: 80, color: Color(0xFF6B73FF)),
-          SizedBox(height: 16),
-          Text(
-            'Financial Tools',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            'Coming Soon!',
-            style: TextStyle(fontSize: 18, color: Color(0xFF8B8B8B)),
-          ),
-        ],
-      ),
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        ListTile(
+          leading: const Icon(Icons.calculate, color: Color(0xFF6CAF50)),
+          title: const Text('SIP Calculator'),
+          trailing: const Icon(Icons.arrow_forward_ios),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SipCalculatorPage(),
+              ),
+            );
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.pie_chart, color: Color(0xFF6CAF50)),
+          title: const Text('Budget Planner'),
+          trailing: const Icon(Icons.arrow_forward_ios),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const BudgetPlannerPage(),
+              ),
+            );
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.attach_money, color: Color(0xFF6B73FF)),
+          title: const Text('Loan EMI Calculator'),
+          trailing: const Icon(Icons.arrow_forward_ios),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => const LoanEMICalculatorPage()));
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.savings, color: Color(0xFF6B73FF)),
+          title: const Text('Savings Goal Tracker'),
+          trailing: const Icon(Icons.arrow_forward_ios),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => const SavingsGoalTrackerPage()));
+          },
+        ), // Add more tools here in the future
+      ],
     );
   }
 }
@@ -2855,22 +2937,6 @@ class WalletPage extends StatelessWidget {
       body: const Center(
         child: Text('Wallet page - use bottom navigation instead'),
       ),
-    );
-  }
-}
-
-class LearnHubPage extends StatelessWidget {
-  const LearnHubPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Learn Hub'),
-        backgroundColor: const Color(0xFFF8F9FE),
-      ),
-      backgroundColor: const Color(0xFFF8F9FE),
-      body: const LearnTab(),
     );
   }
 }
